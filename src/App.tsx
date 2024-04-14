@@ -1,3 +1,4 @@
+import Loader from '@/Loader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,14 +14,6 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
-import { langs } from '@uiw/codemirror-extensions-langs';
-import { vscodeDark } from '@uiw/codemirror-themes-all';
-import CodeMirror, { ViewUpdate } from '@uiw/react-codemirror';
-import { AxiosError, AxiosHeaders } from 'axios';
-import { CirclePlus, Trash2 } from 'lucide-react';
-import pb from 'pretty-bytes';
-import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
-import axiosInstance from './axios';
 import {
   CardProps,
   KeyValueMethod,
@@ -28,8 +21,15 @@ import {
   ParamsType,
   ResInfoType
 } from '@/types/types';
+import { langs } from '@uiw/codemirror-extensions-langs';
+import { vscodeDark } from '@uiw/codemirror-themes-all';
+import CodeMirror, { ViewUpdate } from '@uiw/react-codemirror';
+import { AxiosError, AxiosHeaders } from 'axios';
+import { CirclePlus, Trash2 } from 'lucide-react';
+import pb from 'pretty-bytes';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { toast as sooner } from 'sonner';
-import Loader from '@/Loader';
+import axiosInstance from './axios';
 
 function App({ className }: CardProps) {
   const [option, setOption] = useState<MethodType>('GET');
@@ -174,24 +174,24 @@ function App({ className }: CardProps) {
   return (
     <div className="h-screen bg-gray-700 relative">
       <div
-        className={`bg-slate-900 h-[97%] w-[98%] rounded-md 
+        className={`bg-slate-900 h-[97%] sm:w-[98%] w-[95%] rounded-md 
         absolute left-[50%] translate-x-[-50%] 
         top-[50%] translate-y-[-50%]
         `}
       >
-        <div className="w-[80%] h-full flex flex-col  m-auto">
+        <div className="sm:w-[80%] w-[100%] h-full flex flex-col  m-auto">
           <form
             onSubmit={onsubmit}
             className="flex flex-col justify-start h-[60vh] items-center"
           >
-            <div className="w-[70%] h-[20dvh]   flex justify-center items-center">
+            <div className="sm:w-[70%] w-[90%]  h-[20dvh]   flex justify-center items-center">
               <Select
                 required
                 defaultValue="GET"
                 value={option}
                 onValueChange={(e: MethodType) => setOption(e)}
               >
-                <SelectTrigger className="w-[110px]">
+                <SelectTrigger className="w-[110px] border-[#343355] border-[1px]">
                   <SelectValue placeholder="Select Method" />
                 </SelectTrigger>
                 <SelectContent className=" ">
@@ -206,7 +206,7 @@ function App({ className }: CardProps) {
                 </SelectContent>
               </Select>
               <Input
-                className="w-[100%]  rounded-none border-l-0"
+                className="w-[100%]  rounded-none border-[#343355]  border-l-0"
                 type="url"
                 required
                 value={url}
@@ -214,18 +214,22 @@ function App({ className }: CardProps) {
                 placeholder="http://example.com"
               />
               <Button
-                className="rounded-none rounded-e-md border-y-[1px] text-base  border-r-[1px]"
+                className="rounded-none rounded-e-md border-[#343355]  border-y-[1px] text-base  border-r-[1px]"
                 type="submit"
               >
                 Send
               </Button>
             </div>
             <div
-              className="w-[70%] h-[20dvh]  text-slate-400 
-            flex justify-start items-start"
+              className="sm:w-[70%] w-[90%] h-[20dvh]  text-slate-400 
+            flex sm:justify-start justify-center  items-start"
             >
-              <Tabs defaultValue="query-params" className="w-[400px]">
-                <TabsList className="grid w-[90%] grid-cols-3 gap-x-1">
+              <Tabs
+                defaultValue="query-params"
+                className="w-[23rem] min-w-[15rem]"
+              >
+                {/* sm:w-[calc(100%-2rem)] w-[100%] */}
+                <TabsList className="grid  grid-cols-3 gap-x-1">
                   <TabsTrigger value="query-params">Query Params</TabsTrigger>
                   <TabsTrigger value="header">Header</TabsTrigger>
                   <TabsTrigger value="json">JSON</TabsTrigger>
@@ -233,7 +237,7 @@ function App({ className }: CardProps) {
                 <TabsContent value="query-params">
                   <Card
                     className={
-                      'bg-transparent w-[90%] min-h-24 max-h-52 overflow-y-scroll [&::-webkit-scrollbar]:bg-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-[rgb(168,168,168)] [&::-webkit-scrollbar-thumb]:rounded-xl'
+                      'bg-transparent border-[#343355] border-2 min-h-24 max-h-52 overflow-y-scroll [&::-webkit-scrollbar]:bg-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-[#343355] [&::-webkit-scrollbar-thumb]:rounded-xl'
                     }
                   >
                     <CardContent className={`${keyValue.length < 1 && 'p-0'}`}>
@@ -241,7 +245,7 @@ function App({ className }: CardProps) {
                         {keyValue.map((item, i) => (
                           <div key={i} className="flex gap-x-[0.7rem]">
                             <Input
-                              className="w-[100%]"
+                              className="w-[100%] border-[#343355] border-2"
                               type="text"
                               name="key"
                               value={item.key}
@@ -249,7 +253,7 @@ function App({ className }: CardProps) {
                               placeholder="key"
                             />
                             <Input
-                              className="w-[100%]"
+                              className="w-[100%] border-[#343355] border-2"
                               type="text"
                               name="value"
                               value={item.value}
@@ -284,7 +288,7 @@ function App({ className }: CardProps) {
                 <TabsContent value="header">
                   <Card
                     className={
-                      'bg-transparent w-[90%] min-h-24 max-h-52 overflow-y-scroll [&::-webkit-scrollbar]:bg-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-[rgb(168,168,168)] [&::-webkit-scrollbar-thumb]:rounded-xl'
+                      'bg-transparent border-[#343355] border-2  min-h-24 max-h-52 overflow-y-scroll [&::-webkit-scrollbar]:bg-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-[#343355] [&::-webkit-scrollbar-thumb]:rounded-xl'
                     }
                   >
                     <CardContent className={`${header.length < 1 && 'p-0'}`}>
@@ -292,7 +296,7 @@ function App({ className }: CardProps) {
                         {header.map((item, i) => (
                           <div key={i} className="flex gap-x-[0.7rem]">
                             <Input
-                              className="w-[100%]"
+                              className="w-[100%] border-[#343355] border-2"
                               type="text"
                               name="key"
                               value={item.key}
@@ -300,7 +304,7 @@ function App({ className }: CardProps) {
                               placeholder="key"
                             />
                             <Input
-                              className="w-[100%]"
+                              className="w-[100%] border-[#343355] border-2"
                               type="text"
                               name="value"
                               value={item.value}
@@ -333,31 +337,39 @@ function App({ className }: CardProps) {
                   </Card>
                 </TabsContent>
                 <TabsContent value="json">
-                  <div
-                    className={`
+                  <Card
+                    className={
+                      'bg-transparent border-transparent  min-h-24 max-h-52 flex items-start justify-start'
+                    }
+                  >
+                    <CardContent className={`p-0 w-[23rem]`}>
+                      <div
+                        className={`
                       ${responseData.length > 2 ? 'rounded-2xl' : ''}
                       overflow-hidden
                       border-2 border-[#343355] rounded-md
                   `}
-                  >
-                    <CodeMirror
-                      className={`bg-transparent w-[100%] h-auto max-h-32 overflow-y-scroll  [&::-webkit-scrollbar]:bg-transparent  [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-[rgba(168,168,168,0.2)] [&::-webkit-scrollbar-thumb]:rounded-3xl text-[0.65rem]
+                      >
+                        <CodeMirror
+                          className={`bg-transparent  h-auto max-h-32 overflow-y-scroll  [&::-webkit-scrollbar]:bg-transparent  [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-[rgba(168,168,168,0.2)] [&::-webkit-scrollbar-thumb]:rounded-3xl text-[0.65rem]
                       
                       `}
-                      value={'{\n\t\n}'}
-                      height="auto"
-                      theme={vscodeDark}
-                      extensions={[langs.json()]}
-                      basicSetup={{
-                        foldGutter: false,
-                        dropCursor: false,
-                        allowMultipleSelections: false,
-                        indentOnInput: false
-                      }}
-                      editable={!false}
-                      onChange={onChange}
-                    />
-                  </div>
+                          value={'{\n\t\n}'}
+                          height="auto"
+                          theme={vscodeDark}
+                          extensions={[langs.json()]}
+                          basicSetup={{
+                            foldGutter: false,
+                            dropCursor: false,
+                            allowMultipleSelections: false,
+                            indentOnInput: false
+                          }}
+                          editable={!false}
+                          onChange={onChange}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
               </Tabs>
             </div>
@@ -369,24 +381,27 @@ function App({ className }: CardProps) {
             <div className="mx-auto h-[40vh] w-full  flex flex-col justify-start items-center">
               <div className="flex flex-col w-[70%] h-[30%]  justify-start items-start ">
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-medium leading-none">
+                  <h2 className="[font-size:_clamp(1.5em,3vw,10em)] font-medium leading-none">
                     Response
                   </h2>
                 </div>
-                <Separator className="my-[0.5rem]" />
-                <div className="flex  h-5 items-center space-x-2 text-sm">
+                <Separator className="my-[0.5rem] bg-[#343355]" />
+                <div className="flex [font-size:_clamp(0.6em,3vw,1em)]  h-5 items-center space-x-2 text-sm">
                   <div className="flex space-x-1">
                     <div>Status</div>
                     <span className="">:</span>
                     <div>{resInfo.status}</div>
                   </div>
-                  <Separator orientation="vertical" />
+                  <Separator orientation="vertical" className="bg-[#343355]" />
                   <div className="flex space-x-1">
                     <div>Time</div>
                     <span className="">:</span>
-                    <div>{resInfo.time}ms</div>
+                    <div>
+                      {resInfo.time}
+                      {resInfo.time && 'ms'}
+                    </div>
                   </div>
-                  <Separator orientation="vertical" />
+                  <Separator orientation="vertical" className="bg-[#343355]" />
                   <div className="flex space-x-1">
                     <div>Size</div>
                     <span className="">:</span>
@@ -398,7 +413,7 @@ function App({ className }: CardProps) {
                 className="w-[70%] h-[20dvh]  text-slate-400 
             flex justify-start items-start"
               >
-                <Tabs defaultValue="body" className="w-[400px]">
+                <Tabs defaultValue="body" className="w-[23rem] min-w-[15rem]">
                   <TabsList className="grid w-[90%] grid-cols-2 gap-x-1">
                     <TabsTrigger value="body">Body</TabsTrigger>
                     <TabsTrigger value="header">Header</TabsTrigger>
@@ -431,7 +446,7 @@ function App({ className }: CardProps) {
                   <TabsContent value="header">
                     <Card
                       className={
-                        'bg-transparent w-[90%] h-[7rem] overflow-y-scroll [&::-webkit-scrollbar]:bg-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-[rgb(168,168,168)] [&::-webkit-scrollbar-thumb]:rounded-xl'
+                        'bg-transparent border-[#343355] border-2 w-[90%] h-[7rem] overflow-y-scroll [&::-webkit-scrollbar]:bg-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-[#343355] [&::-webkit-scrollbar-thumb]:rounded-xl'
                       }
                     >
                       <CardContent className={`${header.length < 1 && 'p-0'}`}>
@@ -439,7 +454,10 @@ function App({ className }: CardProps) {
                           {responseHeader.map(head => {
                             const { key, value } = head;
                             return (
-                              <span className="" key={key}>
+                              <span
+                                className="[font-size:_clamp(0.6em,3vw,1em)]"
+                                key={key}
+                              >
                                 {key} : {value}
                               </span>
                             );
